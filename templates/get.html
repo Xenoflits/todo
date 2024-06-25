@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <script type="text/javascript">
+        function deleteTodo(todoId) {
+            fetch(`/delete/${todoId}`, {
+                method: 'DELETE'  // Corrected method to DELETE
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();  // Reload the page if deletion is successful
+                } else {
+                    alert('Failed to delete todo');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Failed to delete todo');
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Todo List</h1>
+    <ul>
+        {% for todo in todos %}
+        <li>{{ todo.id }} : {{ todo.todo }} 
+            <button onclick="deleteTodo('{{ todo.id }}')">Delete</button>
+            <!-- Ensure todo.id is enclosed in single quotes ('{{ todo.id }}') -->
+        </li>
+        {% endfor %}
+    </ul>
+    <form action="{{ url_for('submit') }}" method="post">
+        <label for="todo_input">New todo:</label>
+        <input type="text" id="todo_input" name="todo_input">
+        <input type="submit" value="Add">
+    </form>
+</body>
+</html>
